@@ -1,0 +1,222 @@
+{
+  "log": {
+    "loglevel": "info"
+  },
+  "inbounds": [
+    {
+      "tag": "FALLBACK_INBOUND",
+      "port": 10000,
+      "protocol": "trojan",
+      "settings": {
+        "clients": [],
+        "decryption": "none",
+        "fallbacks": [
+          {
+            "path": "/cX2X3evcvkFYh8",
+            "dest": "@cX2X3evcvkFYh8",
+            "xver": 2
+          },
+          {
+            "path": "/rbA843qeVzyQ52",
+            "dest": "@rbA843qeVzyQ52",
+            "xver": 2
+          },
+          {
+            "path": "/dbA843qeVzyQ52",
+            "dest": "@dbA843qeVzyQ52",
+            "xver": 2
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "ocspStapling": 3600,
+              "certificateFile": "/var/lib/marzban/certs/cert.pem",
+              "keyFile": "/var/lib/marzban/certs/privkey.key"
+            }
+          ],
+          "minVersion": "1.2",
+          "cipherSuites": "",
+          "alpn": [
+            "http/1.1"
+          ]
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    },
+    {
+      "tag": "America VMess Websocket",
+      "listen": "@cX2X3evcvkFYh8",
+      "protocol": "vmess",
+      "settings": {
+        "clients": []
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "acceptProxyProtocol": true,
+          "path": "/cX2X3evcvkFYh8"
+        },
+        "security": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    },
+    {
+      "tag": "Japan VMess Websocket",
+      "listen": "@rbA843qeVzyQ52",
+      "protocol": "vmess",
+      "settings": {
+        "clients": []
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "acceptProxyProtocol": true,
+          "path": "/rbA843qeVzyQ52"
+        },
+        "security": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    },
+    {
+      "tag": "Japan Vless Websocket",
+      "listen": "@dbA843qeVzyQ52",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {
+          "acceptProxyProtocol": true,
+          "header": {
+            "type": "http",
+            "request": {
+              "path": [
+                "/dbA843qeVzyQ52"
+              ]
+            }
+          }
+        },
+        "security": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "DIRECT"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "BLOCK"
+    },
+    {
+      "tag": "America-zephyrus",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 10001
+          }
+        ]
+      }
+    },
+    {
+      "tag": "Japan-zephyrus",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 10002
+          }
+        ]
+      }
+    }
+  ],
+  "dns": {
+    "servers": [
+      "8.8.8.8"
+    ]
+  },
+  "routing": {
+    "rules": [
+      {
+        "outboundTag": "BLOCK",
+        "domain": [
+          "geosite:private"
+        ],
+        "type": "field"
+      },
+      {
+        "outboundTag": "BLOCK",
+        "ip": [
+          "geoip:private"
+        ],
+        "type": "field"
+      },
+      {
+        "outboundTag": "DIRECT",
+        "domain": [
+          "regexp:.*\\.ir$"
+        ],
+        "type": "field"
+      },
+      {
+        "outboundTag": "DIRECT",
+        "ip": [
+          "geoip:ir"
+        ],
+        "type": "field"
+      },
+      {
+        "inboundTag": [
+
+          "America VMess Websocket"
+        ],
+        "outboundTag": "America-zephyrus",
+        "type": "field"
+      },
+      {
+        "inboundTag": [
+          "Japan VMess Websocket",
+          "Japan Vless Websocket"
+        ],
+        "outboundTag": "Japan-zephyrus",
+        "type": "field"
+      }
+    ]
+  }
+}
