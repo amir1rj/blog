@@ -25,6 +25,11 @@
             "path": "/dbA843qeVzyQ52",
             "dest": "@dbA843qeVzyQ52",
             "xver": 2
+          },
+          {
+            "path": "/abA843qeVzyQ52",
+            "dest": "@abA843qeVzyQ52",
+            "xver": 2
           }
         ]
       },
@@ -130,6 +135,30 @@
           "tls"
         ]
       }
+    },
+    {
+      "tag": "Brazil Vless Websocket",
+      "listen": "@abA843qeVzyQ52",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "acceptProxyProtocol": true,
+          "path": "/abA843qeVzyQ52"
+        },
+        "security": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
     }
   ],
   "outbounds": [
@@ -161,6 +190,19 @@
           {
             "address": "127.0.0.1",
             "port": 10002
+          }
+        ]
+      }
+    },
+    {
+
+      "tag": "Brazil-zephyrus",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "127.0.0.1",
+            "port": 1024
           }
         ]
       }
@@ -203,7 +245,6 @@
       },
       {
         "inboundTag": [
-
           "America VMess Websocket"
         ],
         "outboundTag": "America-zephyrus",
@@ -215,6 +256,13 @@
           "Japan Vless Websocket"
         ],
         "outboundTag": "Japan-zephyrus",
+        "type": "field"
+      },
+      {
+        "inboundTag": [
+          "Brazil Vless Websocket"
+        ],
+        "outboundTag": "Brazil-zephyrus",
         "type": "field"
       }
     ]
